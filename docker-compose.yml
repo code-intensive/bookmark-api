@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  dev-db:
+    image:  postgres:13.8-bullseye
+    container_name: dev-db-postgres
+    pull_policy: never
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=bookmarks
+      - POSTGRES_USER=bookmark
+      - POSTGRES_PASSWORD=bookmark
+    networks:
+      - bookmarks
+
+  test-db:
+    image:  postgres:13.8-bullseye
+    container_name: test-db-postgres
+    pull_policy: never
+    ports:
+      - 5435:5432
+    environment:
+      - POSTGRES_DB=bookmarks
+      - POSTGRES_USER=bookmark
+      - POSTGRES_PASSWORD=bookmark
+    networks:
+      - bookmarks
+
+networks:
+  bookmarks:
