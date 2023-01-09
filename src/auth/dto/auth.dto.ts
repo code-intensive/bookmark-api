@@ -5,7 +5,10 @@ import {
   IsOptional,
   IsString,
   IsStrongPassword,
+  MinLength,
 } from 'class-validator';
+
+const MIN_LENGTH = 4;
 
 export class SignInDto {
   @IsNotEmpty()
@@ -19,9 +22,13 @@ export class SignInDto {
 
 export class SignUpDto extends SignInDto {
   @IsOptional()
+  @IsString()
+  @MinLength(MIN_LENGTH)
   firstName: string;
 
   @IsOptional()
+  @IsString()
+  @MinLength(MIN_LENGTH)
   lastName: string;
 }
 
@@ -29,10 +36,14 @@ export class UserInDBDto {
   @IsNumber()
   id: number;
 
+  @IsOptional()
   @IsString()
+  @MinLength(MIN_LENGTH)
   firstName: string;
 
+  @IsOptional()
   @IsString()
+  @MinLength(MIN_LENGTH)
   lastName: string;
 
   @IsNotEmpty()

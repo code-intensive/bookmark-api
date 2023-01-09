@@ -24,12 +24,12 @@ export class AuthService {
 
     if (!user) throw new BadRequestException(this.INVALID_SIGNIN_MESSAGE);
 
-    if (!this.authenticate(user.password, credentials.password)){
+    if (!this.authenticate(credentials.password, user.password)) {
       throw new BadRequestException(this.INVALID_SIGNIN_MESSAGE);
     }
 
     const access_token = await this.generateAccessToken(user.id, user.email);
-    return {access_token}
+    return { access_token };
   }
 
   async signUp(credentials: SignUpDto): Promise<UserInDBDto> {
@@ -53,25 +53,19 @@ export class AuthService {
     return user;
   }
 
-  private generateAccessToken(
-    id: number,
-    email: string,
-  ): Promise<string> {
+  private generateAccessToken(id: number, email: string): Promise<string> {
     const payload = { sub: id, email };
     const JwtSignOptions = {
       secret: this.config.get('JWT_SECRET'),
       expiresIn: this.config.get('JWT_EXPIRES_IN'),
     };
-    return this.jwtService.signAsync(
-      payload,
-      JwtSignOptions,
-    );
+    return this.jwtService.signAsync(payload, JwtSignOptions);
   }
 
-  private async authenticate(plainPassword:string, hash: string): Promise<boolean>{
-    return await argon.verify(
-      hash,
-      plainPassword,
-    );
+  private async authenticate(
+    plainPassword: string,
+    hash: string,
+  ): Promise<boolean> {
+    return await argon.verify(hash, plainPassword);
   }
 }
